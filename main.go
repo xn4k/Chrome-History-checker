@@ -8,7 +8,7 @@ import (
 )
 
 func execRow() {
-	db, err := sql.Open("sqlite3", "test.db")
+	db, err := sql.Open("sqlite3", "History")
 
 	if err != nil {
 		log.Fatal(err)
@@ -16,21 +16,35 @@ func execRow() {
 
 	defer db.Close()
 
-	sts := `
-		SELECT 
-		  datetime(last_visit_time/1000000-11644473600, "unixepoch") as last_visited, 
-		  url, 
-		  title, 
-		  visit_count 
-		FROM urls
-		`
-	_, err = db.Exec(sts)
+	rows, err := db.Query("SELECT * FROM urls")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("table cars created")
+	fmt.Println(rows, "thats works")
+	fmt.Println("ada")
+
+	defer rows.Close()
+
+	for rows.Next() {
+
+		var id int
+		var url string
+		var title string
+		var visit_count int
+		var typed_count int
+		var last_visit_time int
+		var hidden int
+
+		err = rows.Scan(&id, &url, &title, &visit_count, &typed_count, &last_visit_time, &hidden)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Printf("%d %s %d\n", id, url, title, visit_count, typed_count, last_visit_time, hidden)
+	}
 }
 
 // checkSqlite3Version checks what version of sqlite3 is installed on the host.
@@ -54,5 +68,6 @@ func checkSqlite3Version() {
 }
 
 func main() {
+	execRow()
 
 }
