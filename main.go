@@ -22,9 +22,6 @@ func execRow() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(rows, "thats works")
-	fmt.Println("ada")
-
 	defer rows.Close()
 
 	for rows.Next() {
