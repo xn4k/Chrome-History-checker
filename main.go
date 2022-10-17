@@ -41,7 +41,31 @@ func execRow() {
 		}
 
 		fmt.Printf("%d %s %d\n", id, url, title, visit_count, typed_count, last_visit_time, hidden)
+
+		// and then print out the id, url, title, visit_count, typed_count, last_visit_time, hidden only with fmt.Println
+		fmt.Println(id, url, title, visit_count, typed_count, last_visit_time, hidden)
 	}
+}
+
+//TODO
+//hello window asks for the input and option
+
+//delete some entries from the database
+func deleteUrl() {
+	db, err := sql.Open("sqlite3", "History")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer db.Close()
+
+	_, err = db.Exec("DELETE FROM urls WHERE url = 'dev'", 1)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }
 
 // checkSqlite3Version checks what version of sqlite3 is installed on the host.
@@ -65,6 +89,7 @@ func checkSqlite3Version() {
 }
 
 func main() {
-	execRow()
+	//execRow()
+	deleteUrl()
 
 }
