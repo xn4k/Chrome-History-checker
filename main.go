@@ -60,7 +60,7 @@ func deleteUrl() {
 
 	defer db.Close()
 
-	_, err = db.Exec("DELETE FROM urls WHERE url = 'dev'", 1)
+	_, err = db.Exec("DELETE FROM urls WHERE url = 'http://www.worldcupfootball.me/ufc/ufc-261-kamaru-usman-vs-jorge-masvidal-live-stream'")
 
 	if err != nil {
 		log.Fatal(err)
