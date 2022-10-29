@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func execRow() {
+func showHistory() {
 	db, err := sql.Open("sqlite3", "History")
 
 	if err != nil {
@@ -40,7 +40,7 @@ func execRow() {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("%d %s %d\n", id, url, title, visit_count, typed_count, last_visit_time, hidden)
+		fmt.Println(id, url, title, visit_count, typed_count, last_visit_time, hidden)
 
 		// and then print out the id, url, title, visit_count, typed_count, last_visit_time, hidden only with fmt.Println
 		fmt.Println(id, url, title, visit_count, typed_count, last_visit_time, hidden)
@@ -49,8 +49,11 @@ func execRow() {
 
 //TODO
 //hello window asks for the input and option
+func hi() {
+	fmt.Println("Hello Party people!")
+}
 
-//delete some entries from the database
+//deleteUrl removes entries from the history containing the given string
 func deleteUrl() {
 	db, err := sql.Open("sqlite3", "History")
 
@@ -60,7 +63,7 @@ func deleteUrl() {
 
 	defer db.Close()
 
-	_, err = db.Exec("DELETE FROM urls WHERE url = 'http://www.worldcupfootball.me/ufc/ufc-261-kamaru-usman-vs-jorge-masvidal-live-stream'")
+	_, err = db.Exec("DELETE FROM urls WHERE url LIKE '%youtube%' ")
 
 	if err != nil {
 		log.Fatal(err)
@@ -89,7 +92,8 @@ func checkSqlite3Version() {
 }
 
 func main() {
-	//execRow()
-	deleteUrl()
-
+	//checkSqlite3Version()
+	//deleteUrl()
+	//showHistory()
+	hi()
 }
