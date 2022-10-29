@@ -9,6 +9,7 @@ import (
 )
 
 var toDelete string
+var toOption int
 
 //TODO asciiLogo prints the ascii logo of the program at the beginning
 func asciLogo() {
@@ -25,6 +26,7 @@ func showHistory() {
 
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
 	defer db.Close()
@@ -33,6 +35,7 @@ func showHistory() {
 
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
 	defer rows.Close()
@@ -62,9 +65,9 @@ func showHistory() {
 
 //TODO
 //hello window asks for the input and option
-func inputGreet() {
+func greetDelete() {
 
-	fmt.Println("Hello Party people! What would you like to do here?")
+	fmt.Println("Hello Party people! What would you like to delete here?")
 	_, err := fmt.Scan(&toDelete)
 	if err != nil {
 		return
@@ -137,11 +140,22 @@ func main() {
 	fmt.Println(val)*/
 
 	checkV()
-	/*deleteUrl()
-	showHistory()*/
+	fmt.Println("Let's start ... \nWhat would you like to do?\n 1. Show history\n 2. Delete history")
+	fmt.Scan(&toOption)
 
-	inputGreet()
+	switch toOption := toOption; {
+	case toOption == 1:
+		fmt.Println("one")
+	case toOption == 2:
+		fmt.Println("two")
+	default:
+		fmt.Println("Ivalid option, try again")
+	}
 
-	deleteUrl(toDelete)
+	/*showHistory()
+
+	greetDelete()
+
+	deleteUrl(toDelete)*/
 
 }
