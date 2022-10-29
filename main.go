@@ -53,9 +53,11 @@ func hi() {
 	var toDelete string
 
 	fmt.Println("Hello Party people! What would you like to delete here jiggo?")
-	fmt.Scan(&toDelete)
-
-	fmt.Println("You want to delete", toDelete)
+	scan, err := fmt.Scan(&toDelete)
+	if err != nil {
+		return
+	}
+	fmt.Println("It's ok homie, keep your secrets, all rows with the keyword", scan, "will be deleted")
 }
 
 //deleteUrl removes all entries from the history containing the given string
