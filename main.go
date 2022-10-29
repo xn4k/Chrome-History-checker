@@ -5,7 +5,20 @@ import (
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
+	"time"
 )
+
+var toDelete string
+
+//TODO asciiLogo prints the ascii logo of the program at the beginning
+func asciLogo() {
+
+}
+
+//TODO outro lines with some nice messages from me
+func outro() {
+	fmt.Println("Thank you for using the program. Have a nice day!")
+}
 
 func showHistory() {
 	db, err := sql.Open("sqlite3", "History")
@@ -49,15 +62,15 @@ func showHistory() {
 
 //TODO
 //hello window asks for the input and option
-func hi() {
-	var toDelete string
+func inputGreet() {
 
-	fmt.Println("Hello Party people! What would you like to delete here jiggo?")
-	scan, err := fmt.Scan(&toDelete)
+	fmt.Println("Hello Party people! What would you like to do here?")
+	_, err := fmt.Scan(&toDelete)
 	if err != nil {
 		return
 	}
-	fmt.Println("It's ok homie, keep your secrets, all rows with the keyword", scan, "will be deleted")
+	fmt.Println("Ahh ok, keep your secrets, searching for '", toDelete, "' strings"+
+		"in the database:")
 }
 
 //deleteUrl removes all entries from the history containing the given string
@@ -68,7 +81,14 @@ func deleteUrl(toDelete string) string {
 		log.Fatal(err)
 	}
 
-	defer db.Close()
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			fmt.Println("Database closed, all entries are removed. Have a nice day!")
+		}
+	}(db)
 
 	_, err = db.Exec("DELETE FROM urls WHERE url LIKE ?", "%"+toDelete+"%")
 
@@ -80,7 +100,7 @@ func deleteUrl(toDelete string) string {
 }
 
 // checkSqlite3Version checks what version of sqlite3 is installed on the host.
-func checkSqlite3Version() {
+func checkV() {
 	db, err := sql.Open("sqlite3", ":memory:")
 
 	if err != nil {
@@ -96,18 +116,32 @@ func checkSqlite3Version() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(version)
+	fmt.Println("Welcome to sqlite3 V.", version)
+}
+
+func DoneAsync() int {
+	fmt.Println("Warming up ...")
+	time.Sleep(3 * time.Second)
+	fmt.Println("Done ...")
+	return 1
 }
 
 func main() {
-	//checkSqlite3Version()
-	//deleteUrl()
-	//showHistory()
-	var toDelete string
 
-	fmt.Println("Hello Party people! What would you like to delete here jiggo?")
-	fmt.Scan(&toDelete)
+	/*fmt.Println("Let's start ...")
+	future := async.Exec(func() interface{} {
+		return DoneAsync()
+	})
+	fmt.Println("Done is running ...")
+	val := future.Await()
+	fmt.Println(val)*/
 
-	fmt.Println("You want to delete", toDelete)
+	checkV()
+	/*deleteUrl()
+	showHistory()*/
+
+	inputGreet()
+
 	deleteUrl(toDelete)
+
 }
