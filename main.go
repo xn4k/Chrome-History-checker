@@ -50,11 +50,16 @@ func showHistory() {
 //TODO
 //hello window asks for the input and option
 func hi() {
-	fmt.Println("Hello Party people!")
+	var toDelete string
+
+	fmt.Println("Hello Party people! What would you like to delete here jiggo?")
+	fmt.Scan(&toDelete)
+
+	fmt.Println("You want to delete", toDelete)
 }
 
-//deleteUrl removes entries from the history containing the given string
-func deleteUrl() {
+//deleteUrl removes all entries from the history containing the given string
+func deleteUrl(toDelete string) string {
 	db, err := sql.Open("sqlite3", "History")
 
 	if err != nil {
@@ -63,11 +68,12 @@ func deleteUrl() {
 
 	defer db.Close()
 
-	_, err = db.Exec("DELETE FROM urls WHERE url LIKE '%youtube%' ")
+	_, err = db.Exec("DELETE FROM urls WHERE url LIKE ?", "%"+toDelete+"%")
 
 	if err != nil {
 		log.Fatal(err)
 	}
+	return toDelete
 
 }
 
@@ -95,5 +101,11 @@ func main() {
 	//checkSqlite3Version()
 	//deleteUrl()
 	//showHistory()
-	hi()
+	var toDelete string
+
+	fmt.Println("Hello Party people! What would you like to delete here jiggo?")
+	fmt.Scan(&toDelete)
+
+	fmt.Println("You want to delete", toDelete)
+	deleteUrl(toDelete)
 }
