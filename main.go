@@ -11,14 +11,24 @@ import (
 var toDelete string
 var toOption int
 
-//TODO asciiLogo prints the ascii logo of the program at the beginning
+// TODO asciiLogo prints the ascii logo of the program at the beginning
 func asciLogo() {
 
 }
 
-//TODO outro lines with some nice messages from me
+// TODO outro lines with some nice messages from me
 func outro() {
 	fmt.Println("Thank you for using the program. Have a nice day!")
+}
+
+// checkByDelete checks if the given string is in the database before delete
+func checkByDelete() {
+
+}
+
+// findHistory searches for the sqlite db on the pc
+func findHistory() {
+
 }
 
 func showHistory() {
@@ -29,16 +39,26 @@ func showHistory() {
 		return
 	}
 
-	defer db.Close()
-
 	rows, err := db.Query("SELECT * FROM urls")
 
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
-
-	defer rows.Close()
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			fmt.Println("Database showed, these are your entries. Have a nice day!")
+		}
+	}(db)
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(rows)
 
 	for rows.Next() {
 
@@ -63,17 +83,17 @@ func showHistory() {
 	}
 }
 
-//TODO
-//hello window asks for the input and option
+// TODO
+// greetDelete window asks for the input and option
 func greetDelete() {
 
-	fmt.Println("Hello Party people! What would you like to delete here?")
+	fmt.Println("Hello Party people! What keyword would you like to delete From your history?")
 	_, err := fmt.Scan(&toDelete)
 	if err != nil {
 		return
 	}
 	fmt.Println("Ahh ok, keep your secrets, searching for '", toDelete, "' strings"+
-		"in the database:")
+		" in the database:")
 }
 
 //deleteUrl removes all entries from the history containing the given string
@@ -102,7 +122,7 @@ func deleteUrl(toDelete string) string {
 
 }
 
-// checkSqlite3Version checks what version of sqlite3 is installed on the host.
+// checkV checks what version of sqlite3 is installed on the host.
 func checkV() {
 	db, err := sql.Open("sqlite3", ":memory:")
 
@@ -120,6 +140,30 @@ func checkV() {
 	}
 
 	fmt.Println("Welcome to sqlite3 V.", version)
+}
+
+// control flow
+func controlFlow() {
+	fmt.Println("Let's start ... \nWhat would you like to do?\n 1. Show history\n 2. Delete history")
+	fmt.Scan(&toOption)
+
+	// loop to check for the right input
+	for toOption != 1 && toOption != 2 {
+		fmt.Println("Please enter a valid option:\n 1. Show history\n 2. Delete history")
+		fmt.Scan(&toOption)
+	}
+	// toOption switch case for the options to show and delete history
+	switch toOption := toOption; {
+	case toOption == 1:
+		fmt.Println("one")
+		showHistory()
+	case toOption == 2:
+		fmt.Println("two")
+		greetDelete()
+		deleteUrl(toDelete)
+	default:
+		fmt.Println("Invalid option, try again")
+	}
 }
 
 func DoneAsync() int {
@@ -140,22 +184,19 @@ func main() {
 	fmt.Println(val)*/
 
 	checkV()
-	fmt.Println("Let's start ... \nWhat would you like to do?\n 1. Show history\n 2. Delete history")
-	fmt.Scan(&toOption)
-
-	switch toOption := toOption; {
-	case toOption == 1:
-		fmt.Println("one")
-	case toOption == 2:
-		fmt.Println("two")
-	default:
-		fmt.Println("Ivalid option, try again")
-	}
-
-	/*showHistory()
-
-	greetDelete()
-
-	deleteUrl(toDelete)*/
+	controlFlow()
 
 }
+
+// func main() {
+// 	// checkV()
+//	// showHistory()
+//	// greetDelete()
+//	// deleteUrl(toDelete)
+// 	controlFlow()
+//	// asciLogo()
+//	// outro()
+// }
+// Path: main.go
+// package main
+//
