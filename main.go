@@ -10,6 +10,10 @@ import (
 
 var toDelete string
 var toOption int
+var database = "History"
+var storyString string
+
+//	"C:\\Users\\stuec\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1/History"
 
 // TODO asciiLogo prints the ascii logo of the program at the beginning
 func asciLogo() {
@@ -21,18 +25,16 @@ func outro() {
 	fmt.Println("Thank you for using the program. Have a nice day!")
 }
 
-// checkByDelete checks if the given string is in the database before delete
-func checkByDelete() {
-
-}
-
 // findHistory searches for the sqlite db on the pc
 func findHistory() {
+	fmt.Println("Give me your History DB file:")
+	fmt.Scan(&database)
+	fmt.Println("Searching for the history database ...")
 
 }
 
 func showHistory() {
-	db, err := sql.Open("sqlite3", "History")
+	db, err := sql.Open("sqlite3", database)
 
 	if err != nil {
 		log.Fatal(err)
@@ -65,21 +67,74 @@ func showHistory() {
 		var id int
 		var url string
 		var title string
-		var visit_count int
-		var typed_count int
-		var last_visit_time int
+		var visitCount int
+		var typedCount int
+		var lastVisitTime int
 		var hidden int
 
-		err = rows.Scan(&id, &url, &title, &visit_count, &typed_count, &last_visit_time, &hidden)
+		err = rows.Scan(&id, &url, &title, &visitCount, &typedCount, &lastVisitTime, &hidden)
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Println(id, url, title, visit_count, typed_count, last_visit_time, hidden)
+		fmt.Println(id, url, title, visitCount, typedCount, lastVisitTime, hidden)
 
 		// and then print out the id, url, title, visit_count, typed_count, last_visit_time, hidden only with fmt.Println
-		fmt.Println(id, url, title, visit_count, typed_count, last_visit_time, hidden)
+		fmt.Println(id, url, title, visitCount, typedCount, lastVisitTime, hidden)
+	}
+}
+
+func checkByDelete() {
+
+	db, err := sql.Open("sqlite3", database)
+
+	if err != nil {
+		log.Fatal(err)
+
+	}
+
+	rows, err := db.Query("SELECT * FROM urls WHERE url LIKE ?", "%"+toDelete+"%")
+
+	if err != nil {
+
+		log.Fatal(err)
+	}
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			fmt.Println("Database showed, these are your entries. Have a nice day!")
+		}
+	}(db)
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(rows)
+
+	for rows.Next() {
+
+		var id int
+		var url string
+		var title string
+		var visitCount int
+		var typedCount int
+		var lastVisitTime int
+		var hidden int
+
+		err = rows.Scan(&id, &url, &title, &visitCount, &typedCount, &lastVisitTime, &hidden)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Println("You sure you want to delete?")
+
+		// and then print out the id, url, title, visit_count, typed_count, last_visit_time, hidden only with fmt.Println
+		fmt.Println(id, url, title, visitCount, typedCount, lastVisitTime, hidden)
 	}
 }
 
@@ -92,8 +147,10 @@ func greetDelete() {
 	if err != nil {
 		return
 	}
+
 	fmt.Println("Ahh ok, keep your secrets, searching for '", toDelete, "' strings"+
 		" in the database:")
+
 }
 
 //deleteUrl removes all entries from the history containing the given string
@@ -113,11 +170,18 @@ func deleteUrl(toDelete string) string {
 		}
 	}(db)
 
-	_, err = db.Exec("DELETE FROM urls WHERE url LIKE ?", "%"+toDelete+"%")
-
-	if err != nil {
-		log.Fatal(err)
+	checkByDelete()
+	fmt.Println("Are you sure you want to delete these entries? (1 = yes, 2 = no)")
+	fmt.Scan(&toOption)
+	if toOption == 1 {
+		_, err = db.Exec("DELETE FROM urls WHERE url LIKE ?", "%"+toDelete+"%")
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		fmt.Println("Ok, no entries deleted. Have a nice day!")
 	}
+
 	return toDelete
 
 }
@@ -174,29 +238,17 @@ func DoneAsync() int {
 }
 
 func main() {
-
-	/*fmt.Println("Let's start ...")
-	future := async.Exec(func() interface{} {
-		return DoneAsync()
-	})
-	fmt.Println("Done is running ...")
-	val := future.Await()
-	fmt.Println(val)*/
-
 	checkV()
+	//findHistory()
 	controlFlow()
 
 }
 
-// func main() {
-// 	// checkV()
-//	// showHistory()
-//	// greetDelete()
-//	// deleteUrl(toDelete)
-// 	controlFlow()
-//	// asciLogo()
-//	// outro()
-// }
-// Path: main.go
-// package main
-//
+// async function
+/*fmt.Println("Let's start ...")
+future := async.Exec(func() interface{} {
+	return DoneAsync()
+})
+fmt.Println("Done is running ...")
+val := future.Await()
+fmt.Println(val)*/
