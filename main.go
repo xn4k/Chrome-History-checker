@@ -12,9 +12,9 @@ import (
 
 var toDelete string
 var toOption int
+var databasePath string
 
 //var databasePath = "" + "/History"
-var storyString string
 
 //	"C:\\Users\\stuec\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1/History"
 
@@ -38,14 +38,15 @@ func findHistory() {
 	fmt.Println("Give me your History DB file:")
 	scanner := bufio.NewScanner(os.Stdin)
 	if scanner.Scan() {
-		databasePath := scanner.Text()
+		databasePath = scanner.Text()
 		fmt.Println("Searching for the history databasePath ...")
 		fmt.Println("Input was:", databasePath)
 	}
 
 }
 
-/*func showHistory() {
+func showHistory() {
+	fmt.Println("Showing history ...")
 	fmt.Println(databasePath)
 	db, err := sql.Open("sqlite3", databasePath)
 
@@ -96,7 +97,7 @@ func findHistory() {
 		// and then print out the id, url, title, visit_count, typed_count, last_visit_time, hidden only with fmt.Println
 		fmt.Println(id, url, title, visitCount, typedCount, lastVisitTime, hidden)
 	}
-}*/
+}
 
 func checkByDelete() {
 
@@ -231,26 +232,28 @@ func actionSelect() int {
 }
 
 // control flow
-func controlFlow() {
-	// toOption switch case for the options to show and delete history
-	switch toOption := toOption; {
-	case toOption == 1:
-		fmt.Println("one")
-		//showHistory()
-	case toOption == 2:
-		fmt.Println("two")
-		//greetDelete()
-		//deleteUrl(toDelete)
-	default:
-		fmt.Println("Invalid option, try again")
-	}
+func controlFlow(toOption int) {
+
 }
 
 func main() {
 	checkV()
 	findHistory()
 	actionSelect()
-	//controlFlow()
+
+	// toOption switch case for the options to show and delete history
+	switch chosenOpt := toOption; {
+	case chosenOpt == 1:
+		//chosenOpt == 1 tells the program to show the history
+		showHistory()
+		fmt.Println(databasePath)
+	case chosenOpt == 2:
+		fmt.Println("two")
+		//greetDelete()
+		//deleteUrl(toDelete)
+	default:
+		fmt.Println("Invalid option, try again")
+	}
 
 }
 
