@@ -19,7 +19,17 @@ var databasePath string
 //	"C:\\Users\\stuec\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1/History"
 
 // TODO asciiLogo prints the ascii logo of the program at the beginning
-func asciLogo() {
+func logo() {
+	fmt.Println("   _____            _                               ")
+	fmt.Println("  / ____|          | |                              ")
+	fmt.Println(" | |  __  ___   ___| |__  _ __ ___  _ __ ___  _   _ ")
+	fmt.Println(" | | |_ |/ _ \\ / __| '_ \\| '__/ _ \\| '_ ` _ \\| | | |")
+	fmt.Println(" | |__| | (_) | (__| | | | | | (_) | | | | | | |_| |")
+	fmt.Println("  \\_____|\\___/ \\___|_| |_|_|  \\___/|_| |_| |_|\\__, |")
+	fmt.Println("                                               __/ |")
+	fmt.Println("                                              |___/ ")
+	fmt.Println("Gochromy - A simple chrome history manager")
+	fmt.Println("Made by Mikhail Zhivoderov")
 
 }
 
@@ -230,6 +240,7 @@ func controlFlow(toOption int) {
 }
 
 func main() {
+	logo()
 	checkV()
 	findHistory()
 	actionSelect()
