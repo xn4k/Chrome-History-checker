@@ -1,16 +1,19 @@
 package main
 
 import (
+	"bufio"
 	"database/sql"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
+	"os"
 	"time"
 )
 
 var toDelete string
 var toOption int
-var database = "History"
+
+//var databasePath = "" + "/History"
 var storyString string
 
 //	"C:\\Users\\stuec\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1/History"
@@ -27,14 +30,24 @@ func outro() {
 
 // findHistory searches for the sqlite db on the pc
 func findHistory() {
+	/*fmt.Scan(&databasePath)
+
+
+	fmt.Println(databasePath)*/
+
 	fmt.Println("Give me your History DB file:")
-	fmt.Scan(&database)
-	fmt.Println("Searching for the history database ...")
+	scanner := bufio.NewScanner(os.Stdin)
+	if scanner.Scan() {
+		databasePath := scanner.Text()
+		fmt.Println("Searching for the history databasePath ...")
+		fmt.Println("Input was:", databasePath)
+	}
 
 }
 
-func showHistory() {
-	db, err := sql.Open("sqlite3", database)
+/*func showHistory() {
+	fmt.Println(databasePath)
+	db, err := sql.Open("sqlite3", databasePath)
 
 	if err != nil {
 		log.Fatal(err)
@@ -83,11 +96,11 @@ func showHistory() {
 		// and then print out the id, url, title, visit_count, typed_count, last_visit_time, hidden only with fmt.Println
 		fmt.Println(id, url, title, visitCount, typedCount, lastVisitTime, hidden)
 	}
-}
+}*/
 
 func checkByDelete() {
 
-	db, err := sql.Open("sqlite3", database)
+	/*db, err := sql.Open("sqlite3", databasePath)
 
 	if err != nil {
 		log.Fatal(err)
@@ -135,7 +148,7 @@ func checkByDelete() {
 
 		// and then print out the id, url, title, visit_count, typed_count, last_visit_time, hidden only with fmt.Println
 		fmt.Println(id, url, title, visitCount, typedCount, lastVisitTime, hidden)
-	}
+	}*/
 }
 
 // TODO
@@ -149,7 +162,7 @@ func greetDelete() {
 	}
 
 	fmt.Println("Ahh ok, keep your secrets, searching for '", toDelete, "' strings"+
-		" in the database:")
+		" in the databasePath:")
 
 }
 
@@ -206,25 +219,27 @@ func checkV() {
 	fmt.Println("Welcome to sqlite3 V.", version)
 }
 
-// control flow
-func controlFlow() {
+func actionSelect() {
 	fmt.Println("Let's start ... \nWhat would you like to do?\n 1. Show history\n 2. Delete history")
 	fmt.Scan(&toOption)
-
 	// loop to check for the right input
 	for toOption != 1 && toOption != 2 {
 		fmt.Println("Please enter a valid option:\n 1. Show history\n 2. Delete history")
 		fmt.Scan(&toOption)
 	}
+}
+
+// control flow
+func controlFlow() {
 	// toOption switch case for the options to show and delete history
 	switch toOption := toOption; {
 	case toOption == 1:
 		fmt.Println("one")
-		showHistory()
+		//showHistory()
 	case toOption == 2:
 		fmt.Println("two")
-		greetDelete()
-		deleteUrl(toDelete)
+		//greetDelete()
+		//deleteUrl(toDelete)
 	default:
 		fmt.Println("Invalid option, try again")
 	}
@@ -239,7 +254,9 @@ func DoneAsync() int {
 
 func main() {
 	checkV()
-	//findHistory()
+	findHistory()
+	actionSelect()
+
 	controlFlow()
 
 }
