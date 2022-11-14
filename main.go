@@ -101,7 +101,7 @@ func showHistory() {
 
 func checkByDelete() {
 
-	/*db, err := sql.Open("sqlite3", databasePath)
+	db, err := sql.Open("sqlite3", databasePath)
 
 	if err != nil {
 		log.Fatal(err)
@@ -145,11 +145,9 @@ func checkByDelete() {
 			log.Fatal(err)
 		}
 
-		fmt.Println("You sure you want to delete?")
-
 		// and then print out the id, url, title, visit_count, typed_count, last_visit_time, hidden only with fmt.Println
 		fmt.Println(id, url, title, visitCount, typedCount, lastVisitTime, hidden)
-	}*/
+	}
 }
 
 // TODO
@@ -161,15 +159,11 @@ func greetDelete() {
 	if err != nil {
 		return
 	}
-
-	fmt.Println("Ahh ok, keep your secrets, searching for '", toDelete, "' strings"+
-		" in the databasePath:")
-
 }
 
 //deleteUrl removes all entries from the history containing the given string
 func deleteUrl(toDelete string) string {
-	db, err := sql.Open("sqlite3", "History")
+	db, err := sql.Open("sqlite3", databasePath)
 
 	if err != nil {
 		log.Fatal(err)
@@ -184,7 +178,6 @@ func deleteUrl(toDelete string) string {
 		}
 	}(db)
 
-	checkByDelete()
 	fmt.Println("Are you sure you want to delete these entries? (1 = yes, 2 = no)")
 	fmt.Scan(&toOption)
 	if toOption == 1 {
@@ -240,7 +233,6 @@ func main() {
 	checkV()
 	findHistory()
 	actionSelect()
-
 	// toOption switch case for the options to show and delete history
 	switch chosenOpt := toOption; {
 	case chosenOpt == 1:
@@ -249,8 +241,9 @@ func main() {
 		fmt.Println(databasePath)
 	case chosenOpt == 2:
 		fmt.Println("two")
-		//greetDelete()
-		//deleteUrl(toDelete)
+		greetDelete()
+		checkByDelete()
+		deleteUrl(toDelete)
 	default:
 		fmt.Println("Invalid option, try again")
 	}
