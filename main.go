@@ -219,7 +219,7 @@ func checkV() {
 	fmt.Println("Welcome to sqlite3 V.", version)
 }
 
-func actionSelect() {
+func actionSelect() int {
 	fmt.Println("Let's start ... \nWhat would you like to do?\n 1. Show history\n 2. Delete history")
 	fmt.Scan(&toOption)
 	// loop to check for the right input
@@ -227,6 +227,7 @@ func actionSelect() {
 		fmt.Println("Please enter a valid option:\n 1. Show history\n 2. Delete history")
 		fmt.Scan(&toOption)
 	}
+	return toOption
 }
 
 // control flow
@@ -245,20 +246,19 @@ func controlFlow() {
 	}
 }
 
+func main() {
+	checkV()
+	findHistory()
+	actionSelect()
+	//controlFlow()
+
+}
+
 func DoneAsync() int {
 	fmt.Println("Warming up ...")
 	time.Sleep(3 * time.Second)
 	fmt.Println("Done ...")
 	return 1
-}
-
-func main() {
-	checkV()
-	findHistory()
-	actionSelect()
-
-	controlFlow()
-
 }
 
 // async function
