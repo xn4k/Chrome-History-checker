@@ -7,12 +7,21 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"os"
-	"time"
 )
 
+//app
 var toDelete string
 var toOption int
 var databasePath string
+
+//db
+var id int
+var url string
+var title string
+var visitCount int
+var typedCount int
+var lastVisitTime int
+var hidden int
 
 //var databasePath = "" + "/History"
 
@@ -88,14 +97,6 @@ func showHistory() {
 
 	for rows.Next() {
 
-		var id int
-		var url string
-		var title string
-		var visitCount int
-		var typedCount int
-		var lastVisitTime int
-		var hidden int
-
 		err = rows.Scan(&id, &url, &title, &visitCount, &typedCount, &lastVisitTime, &hidden)
 
 		if err != nil {
@@ -140,14 +141,6 @@ func checkByDelete() {
 	}(rows)
 
 	for rows.Next() {
-
-		var id int
-		var url string
-		var title string
-		var visitCount int
-		var typedCount int
-		var lastVisitTime int
-		var hidden int
 
 		err = rows.Scan(&id, &url, &title, &visitCount, &typedCount, &lastVisitTime, &hidden)
 
@@ -244,12 +237,12 @@ func main() {
 	checkV()
 	findHistory()
 	actionSelect()
-	// toOption switch case for the options to show and delete history
 	switch chosenOpt := toOption; {
+	//chosenOpt == 1 tells the program to show the history
 	case chosenOpt == 1:
-		//chosenOpt == 1 tells the program to show the history
 		showHistory()
 		fmt.Println(databasePath)
+	//chosenOpt == 2 tells the program to delete the entries
 	case chosenOpt == 2:
 		fmt.Println("two")
 		greetDelete()
@@ -260,19 +253,3 @@ func main() {
 	}
 
 }
-
-func DoneAsync() int {
-	fmt.Println("Warming up ...")
-	time.Sleep(3 * time.Second)
-	fmt.Println("Done ...")
-	return 1
-}
-
-// async function
-/*fmt.Println("Let's start ...")
-future := async.Exec(func() interface{} {
-	return DoneAsync()
-})
-fmt.Println("Done is running ...")
-val := future.Await()
-fmt.Println(val)*/
